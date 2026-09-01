@@ -32,6 +32,7 @@ If you don't have a local .NET development environment set up, or just prefer to
 5. Provide a direct URL to your original `TickTick.exe` file
     - **⚠️Installed exe from program file, not the installer**
     - **⚠️ You can upload it to [filebin.net](https://filebin.net), or any other hosting service that gives a direct download link (e.g. not going to work with Google Drive)**
+    - **✅ For filebin.net, both `https://filebin.net/<bucket>/<filename>` and single-file bucket links like `https://filebin.net/<bucket>` are supported.**
     - **⚠️ You might need to rename the .exe part to .ANYTHING to upload it in those online services, the script will automatically rename it to exe.**
 7. Click **Run workflow** and wait for the build to finish.
 8. Go to the **Releases** section on the right side of your repository's main page. You will find a new **Draft release** containing your `TickTick_Patched.zip` file ready to download.
