@@ -31,8 +31,38 @@ jobs:
       - name: Download TickTick Setup
         shell: pwsh
         run: |
-          Write-Host "Downloading target file from ${{ inputs.app_url }}..."
-          Invoke-WebRequest -Uri "${{ inputs.app_url }}" -OutFile "TickTick.exe"
+          function Test-PortableExecutable([string]$path) {
+            if (-not (Test-Path $path)) { return $false }
+            $header = Get-Content -Path $path -AsByteStream -ReadCount 2 -TotalCount 2
+            return $header.Length -eq 2 -and $header[0] -eq 0x4D -and $header[1] -eq 0x5A
+          }
+
+          $downloadUrl = "${{ inputs.app_url }}"
+          Write-Host "Downloading target file from $downloadUrl..."
+          Invoke-WebRequest -Uri $downloadUrl -OutFile "TickTick.exe"
+
+          if (-not (Test-PortableExecutable "TickTick.exe")) {
+            $uri = [Uri]$downloadUrl
+            $pathParts = $uri.AbsolutePath.Trim('/').Split('/')
+            $isFilebinBucketUrl = $uri.Host -ieq "filebin.net" -and $pathParts.Length -eq 1 -and $pathParts[0]
+
+            if ($isFilebinBucketUrl) {
+              $bucket = $pathParts[0]
+              $listingHtml = Get-Content -Path "TickTick.exe" -Raw
+              $match = [regex]::Match($listingHtml, "href=""/$bucket/([^""#?]+)""")
+              if ($match.Success) {
+                $fileName = $match.Groups[1].Value
+                $resolvedDownloadUrl = "https://filebin.net/$bucket/$fileName"
+                Write-Host "Detected a filebin bucket URL. Downloading: $resolvedDownloadUrl"
+                Invoke-WebRequest -Uri $resolvedDownloadUrl -OutFile "TickTick.exe"
+              }
+            }
+          }
+
+          if (-not (Test-PortableExecutable "TickTick.exe")) {
+            Write-Error "Downloaded file is not a valid Windows executable. Please provide a direct download URL to TickTick.exe."
+            exit 1
+          }
 
       - name: Run Patcher
         # We can just build and run directly via dotnet run
