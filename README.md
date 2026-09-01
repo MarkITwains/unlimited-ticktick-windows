@@ -6,14 +6,30 @@
 > [!TIP]
 > If you want to learn how you can do the same for Linux🐧/Electron version of the ticktick [follow instructions by the community.](https://github.com/yazdipour/unlimited-ticktick-windows/issues/12)
 
-### How to use? 
+### How to use (one-click, recommended)
 
-- Upgrade or Install the original TickTick (Chinese Ticktick/dida365 will not work - personally never tried it).
-- Close the app from System tray completely.
-- Copy the exe file inside installed path (usually `C:\Program Files (x86)\TickTick`). Have a backup from the original exe file just in case.
+1. Install or update the original TickTick first (Chinese TickTick/dida365 will not work - personally never tried it).
+2. Double-click **`TTPatcher.exe`** (grab it from the [releases page](https://github.com/yazdipour/cracked-ticktick-windows/releases), or build it yourself — see below).
+    - No .NET installation needed — it is self-contained.
+    - It locates your installed TickTick automatically, closes it, backs up the original exe next to it (`TickTick_YYYYMMDD_HHMMSS.bak.exe`), patches it **in place**, and relaunches TickTick.
+    - A UAC prompt appears if the install folder needs admin rights.
+3. Done. Whenever TickTick updates itself, just run `TTPatcher.exe` again — it is safe to re-run.
+
+You can also patch a specific file without touching your installation:
+
+```bash
+TTPatcher.exe "C:\path\to\TickTick.exe"   # writes TickTick_Patched.exe next to it
+```
+
+### Build TTPatcher yourself
+
+```bash
+dotnet publish TTPatcher.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish
+# Result: publish\TTPatcher.exe (~65 MB, no dependencies)
+```
 
 > [!CAUTION]
-> Want the new version or Just got the update notification? First update the app from the app itself, then replace the patched exe file with the new one. This way you can keep enjoying the pro features without losing them after each update.
+> Want the new version or Just got the update notification? First update the app from the app itself, then run TTPatcher.exe again. This way you can keep enjoying the pro features without losing them after each update.
 
 ### Download the patched executable for Windows:
 
@@ -34,6 +50,9 @@ If you don't have a local .NET development environment set up, or just prefer to
 5. Click the **Run workflow** button and wait for the build to finish.
 6. Go to the **Releases** section on the right side of your repository's main page. You will find a new **Draft release** containing your `TickTick_Patched.zip` file ready to download.
 7. Download the ZIP, extract the `TickTick_Patched.exe` file, and replace your original `TickTick.exe` located in your TickTick installation folder (usually `C:\Program Files (x86)\TickTick`).
+
+> [!TIP]
+> On your own machine you don't need any of this — just run the local one-click `TTPatcher.exe` (see "How to use" above). The Cloud Build section is for machines without a local build option.
 
 ---
 

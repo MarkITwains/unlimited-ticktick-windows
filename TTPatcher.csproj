@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,6 +7,12 @@
     <Nullable>enable</Nullable>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
+    <AssemblyName>TTPatcher</AssemblyName>
+    <RootNamespace>TTPatcher</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- Windows-only tool; registry/process APIs trigger CA1416 on other platforms -->
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
